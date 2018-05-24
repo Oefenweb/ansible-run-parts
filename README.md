@@ -73,7 +73,7 @@ None
     run_parts_jobs:
     - name: lorem.d
       job: run-parts /etc/run-parts/lorem.d
-      minute: @daily
+      minute: '@daily'
 ```
 
 #### License
