@@ -12,24 +12,10 @@
           - name: 00-ipsum
             content: |
               #!/usr/bin/env bash
-              #
-              # Ansible managed
-              #
-              # set -x;
-              set -e;
-              set -o pipefail;
-              #
               echo "${0}" $(( ( RANDOM % 10 ) + 1 ));
           - name: 01-dolor
             content: |
               #!/usr/bin/env bash
-              #
-              # Ansible managed
-              #
-              # set -x;
-              set -e;
-              set -o pipefail;
-              #
               echo "${0}" $(( ( RANDOM % 10 ) + 1 ));
 
       - name: sit
@@ -37,17 +23,14 @@
           - name: 00-amet
             content: |
               #!/usr/bin/env bash
-              #
-              # Ansible managed
-              #
-              # set -x;
-              set -e;
-              set -o pipefail;
-              #
               echo "${0}" $(( ( RANDOM % 10 ) + 1 ));
           - name: consectetur
             state: absent
 
       - name: adipiscing
-        parts: []
         state: absent
+
+    run_parts_jobs:
+    - name: lorem.d
+      job: run-parts /etc/run-parts/lorem.d
+      minute: @daily

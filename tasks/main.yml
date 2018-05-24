@@ -62,8 +62,8 @@
     group: "{{ item.1.group | default('root') }}"
     mode: "{{ item.1.mode | default('0755') }}"
   with_subelements:
-     - "{{ run_parts_groups }}"
-     - parts
+    - "{{ run_parts_groups | selectattr('parts', 'defined') | list }}"
+    - parts
   when: item.1.state is undefined or item.1.state == 'present'
   tags:
     - configuration
@@ -76,8 +76,8 @@
     path: "{{ run_parts_configuration_path }}/{{ item.0.name }}.d/{{ item.1.name }}"
     state: absent
   with_subelements:
-     - "{{ run_parts_groups }}"
-     - parts
+    - "{{ run_parts_groups | selectattr('parts', 'defined') | list }}"
+    - parts
   when: item.1.state is defined and item.1.state == 'absent'
   tags:
     - configuration
