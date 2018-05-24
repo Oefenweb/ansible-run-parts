@@ -1,0 +1,36 @@
+# test file for run-parts
+---
+- hosts: localhost
+  connection: local
+  become: true
+  roles:
+    - ../../
+  vars:
+    run_parts_groups:
+      - name: lorem
+        parts:
+          - name: 00-ipsum
+            content: |
+              #!/usr/bin/env bash
+              echo "${0}" $(( ( RANDOM % 10 ) + 1 ));
+          - name: 01-dolor
+            content: |
+              #!/usr/bin/env bash
+              echo "${0}" $(( ( RANDOM % 10 ) + 1 ));
+
+      - name: sit
+        parts:
+          - name: 00-amet
+            content: |
+              #!/usr/bin/env bash
+              echo "${0}" $(( ( RANDOM % 10 ) + 1 ));
+          - name: consectetur
+            state: absent
+
+      - name: adipiscing
+        state: absent
+
+    run_parts_jobs:
+    - name: lorem.d
+      job: run-parts /etc/run-parts/lorem.d
+      minute: '@daily'

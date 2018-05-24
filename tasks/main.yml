@@ -1,0 +1,117 @@
+# tasks file for run-parts
+---
+- name: install dependencies
+  apt:
+    name: "{{ item }}"
+    state: "{{ apt_install_state | default('latest') }}"
+    update_cache: true
+    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+  with_items: "{{ run_parts_dependencies }}"
+  tags:
+    - configuration
+    - run-parts
+    - run-parts-dependencies
+
+- name: stat directories
+  stat:
+    path: "{{ item }}/"
+  register: _stat_directories
+  with_items:
+    - "{{ run_parts_required_paths }}"
+  tags:
+    - configuration
+    - run-parts
+    - run-parts-configure-directories
+    - run-parts-configure-directories-stat
+
+- name: create directories
+  file:
+    path: "{{ item.item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items: "{{ _stat_directories.results }}"
+  when: item.stat is defined and item.stat.exists == false
+  tags:
+    - configuration
+    - run-parts
+    - run-parts-configure-directories
+    - run-parts-configure-directories-create
+
+- name: create (group) directories
+  file:
+    path: "{{ run_parts_configuration_path }}/{{ item.name }}.d"
+    state: directory
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0755') }}"
+  with_items: "{{ run_parts_groups }}"
+  when: item.state is undefined or item.state == 'present'
+  tags:
+    - configuration
+    - run-parts
+    - run-parts-configure-directories
+    - run-parts-configure-directories-create
+
+- name: create parts
+  copy:
+    dest: "{{ run_parts_configuration_path }}/{{ item.0.name }}.d/{{ item.1.name }}"
+    content: "{{ item.1.content | default('') }}"
+    owner: "{{ item.1.owner | default('root') }}"
+    group: "{{ item.1.group | default('root') }}"
+    mode: "{{ item.1.mode | default('0755') }}"
+  with_subelements:
+    - "{{ run_parts_groups | selectattr('parts', 'defined') | list }}"
+    - parts
+  when: item.1.state is undefined or item.1.state == 'present'
+  tags:
+    - configuration
+    - run-parts
+    - run-parts-configure-parts
+    - run-parts-configure-parts-create
+
+- name: remove parts
+  file:
+    path: "{{ run_parts_configuration_path }}/{{ item.0.name }}.d/{{ item.1.name }}"
+    state: absent
+  with_subelements:
+    - "{{ run_parts_groups | selectattr('parts', 'defined') | list }}"
+    - parts
+  when: item.1.state is defined and item.1.state == 'absent'
+  tags:
+    - configuration
+    - run-parts
+    - run-parts-configure-parts
+    - run-parts-configure-parts-remove
+
+- name: remove (group) directories
+  file:
+    path: "{{ run_parts_configuration_path }}/{{ item.name }}.d"
+    state: absent
+  with_items: "{{ run_parts_groups }}"
+  when: item.state is defined and item.state == 'absent'
+  tags:
+    - configuration
+    - run-parts
+    - run-parts-configure-directories
+    - run-parts-configure-directories-remove
+
+- name: configure (cron) jobs
+  cron:
+    name: "{{ item.name }}"
+    job: "{{ item.job }}"
+    state: "{{ item.state | default('present') }}"
+    day: "{{ item.day | default('*') }}"
+    hour: "{{ item.hour | default('*') }}"
+    minute: "{{ item.minute | default('*') }}"
+    month: "{{ item.month | default('*') }}"
+    weekday: "{{ item.weekday | default('*') }}"
+    cron_file: run-parts
+    user: root
+  with_items: "{{ run_parts_jobs }}"
+  tags:
+    - configuration
+    - run-parts
+    - run-parts-configure
+    - run-parts-configure-jobs
