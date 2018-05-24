@@ -1,0 +1,53 @@
+# test file for run-parts
+---
+- hosts: all
+  remote_user: vagrant
+  become: true
+  roles:
+    - ../../
+  vars:
+    run_parts_groups:
+      - name: lorem
+        parts:
+          - name: 00-ipsum
+            content: |
+              #!/usr/bin/env bash
+              #
+              # Ansible managed
+              #
+              # set -x;
+              set -e;
+              set -o pipefail;
+              #
+              echo "${0}" $(( ( RANDOM % 10 ) + 1 ));
+          - name: 01-dolor
+            content: |
+              #!/usr/bin/env bash
+              #
+              # Ansible managed
+              #
+              # set -x;
+              set -e;
+              set -o pipefail;
+              #
+              echo "${0}" $(( ( RANDOM % 10 ) + 1 ));
+
+      - name: sit
+        parts:
+          - name: 00-amet
+            content: |
+              #!/usr/bin/env bash
+              #
+              # Ansible managed
+              #
+              # set -x;
+              set -e;
+              set -o pipefail;
+              #
+              echo "${0}" $(( ( RANDOM % 10 ) + 1 ));
+          - name: consectetur
+            state: absent
+
+      - name: adipiscing
+        parts: []
+        state: absent

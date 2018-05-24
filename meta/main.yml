@@ -1,0 +1,21 @@
+# meta file for run-parts
+---
+galaxy_info:
+  author: Mischa ter Smitten
+  company: Oefenweb.nl B.V.
+  description: Manage run-parts (and scripts) in Debian-like systems
+  license: MIT
+  min_ansible_version: 2.2.0.0
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
+    - name: Debian
+      versions:
+        - jessie
+        - stretch
+  galaxy_tags:
+    - system
+    - networking
+dependencies: []
