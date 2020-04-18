@@ -1,6 +1,7 @@
 # meta file for run-parts
 ---
 galaxy_info:
+  role_name: run-parts
   author: Mischa ter Smitten
   company: Oefenweb.nl B.V.
   description: Manage run-parts (and scripts) in Debian-like systems
