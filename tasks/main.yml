@@ -2,11 +2,10 @@
 ---
 - name: install dependencies
   apt:
-    name: "{{ item }}"
+    name: "{{ run_parts_dependencies }}"
     state: "{{ apt_install_state | default('latest') }}"
     update_cache: true
     cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
-  with_items: "{{ run_parts_dependencies }}"
   tags:
     - configuration
     - run-parts
@@ -32,7 +31,9 @@
     group: root
     mode: 0755
   with_items: "{{ _stat_directories.results }}"
-  when: item.stat is defined and item.stat.exists == false
+  when:
+    - item.stat is defined
+    - not item.stat.exists
   tags:
     - configuration
     - run-parts
@@ -78,7 +79,9 @@
   with_subelements:
     - "{{ run_parts_groups | selectattr('parts', 'defined') | list }}"
     - parts
-  when: item.1.state is defined and item.1.state == 'absent'
+  when:
+    - item.1.state is defined
+    - item.1.state == 'absent'
   tags:
     - configuration
     - run-parts
@@ -90,7 +93,9 @@
     path: "{{ run_parts_configuration_path }}/{{ item.name }}.d"
     state: absent
   with_items: "{{ run_parts_groups }}"
-  when: item.state is defined and item.state == 'absent'
+  when:
+    - item.state is defined
+    - item.state == 'absent'
   tags:
     - configuration
     - run-parts

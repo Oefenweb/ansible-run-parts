@@ -2,6 +2,7 @@
 ---
 run_parts_dependencies:
   - debianutils
+  - cron
 
 run_parts_configuration_path: /etc/run-parts
 run_parts_required_paths:

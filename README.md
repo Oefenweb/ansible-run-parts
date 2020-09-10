@@ -1,12 +1,14 @@
 ## run-parts
 
-[![Build Status](https://travis-ci.org/Oefenweb/ansible-run-parts.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-run-parts) [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-run--parts-blue.svg)](https://galaxy.ansible.com/Oefenweb/run-parts)
+[![Build Status](https://travis-ci.org/Oefenweb/ansible-run-parts.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-run-parts)
+[![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-run--parts-blue.svg)](https://galaxy.ansible.com/Oefenweb/run-parts)
 
 Manage `run-parts` (and scripts) in Debian-like systems.
 
 #### Requirements
 
-* `run-parts` (will be installed)
+* `debianutils` (will be installed)
+* `cron` (will be installed)
 
 #### Variables
 
