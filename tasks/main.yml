@@ -1,4 +1,4 @@
-# tasks file for run-parts
+# tasks file
 ---
 - name: install dependencies
   apt:

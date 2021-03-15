@@ -1,4 +1,4 @@
-# defaults file for run-parts
+# defaults file
 ---
 run_parts_groups: []
 

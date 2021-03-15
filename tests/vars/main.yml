@@ -1,4 +1,4 @@
-# vars file for run-parts
+# vars file
 ---
 run_parts_groups:
   - name: lorem
