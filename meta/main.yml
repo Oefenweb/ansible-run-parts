@@ -2,7 +2,7 @@
 ---
 galaxy_info:
   namespace: oefenweb
-  role_name: run-parts
+  role_name: run_parts
   author: Mischa ter Smitten
   company: Oefenweb.nl B.V.
   description: Manage run-parts (and scripts) in Debian-like systems

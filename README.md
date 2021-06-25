@@ -1,7 +1,7 @@
 ## run-parts
 
 [![CI](https://github.com/Oefenweb/ansible-run-parts/workflows/CI/badge.svg)](https://github.com/Oefenweb/ansible-run-parts/actions?query=workflow%3ACI)
-[![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-run--parts-blue.svg)](https://galaxy.ansible.com/Oefenweb/run-parts)
+[![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-run--parts-blue.svg)](https://galaxy.ansible.com/Oefenweb/run_parts)
 
 Manage `run-parts` (and scripts) in Debian-like systems.
 
