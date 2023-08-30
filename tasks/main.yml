@@ -28,7 +28,7 @@
     path: "{{ item.item }}"
     state: directory
     owner: root
-    ansible.builtin.group: root
+    group: root
     mode: 0755
   with_items: "{{ _stat_directories.results }}"
   when:
@@ -45,7 +45,7 @@
     path: "{{ run_parts_configuration_path }}/{{ item.name }}.d"
     state: directory
     owner: "{{ item.owner | default('root') }}"
-    ansible.builtin.group: "{{ item.group | default('root') }}"
+    group: "{{ item.group | default('root') }}"
     mode: "{{ item.mode | default('0755') }}"
   with_items: "{{ run_parts_groups }}"
   when: item.state is undefined or item.state == 'present'
@@ -60,7 +60,7 @@
     dest: "{{ run_parts_configuration_path }}/{{ item.0.name }}.d/{{ item.1.name }}"
     content: "{{ item.1.content | default('') }}"
     owner: "{{ item.1.owner | default('root') }}"
-    ansible.builtin.group: "{{ item.1.group | default('root') }}"
+    group: "{{ item.1.group | default('root') }}"
     mode: "{{ item.1.mode | default('0755') }}"
   with_subelements:
     - "{{ run_parts_groups | selectattr('parts', 'defined') | list }}"
@@ -113,7 +113,7 @@
     month: "{{ item.month | default('*') }}"
     weekday: "{{ item.weekday | default('*') }}"
     cron_file: run-parts
-    ansible.builtin.user: root
+    user: root
   with_items: "{{ run_parts_jobs }}"
   tags:
     - configuration
