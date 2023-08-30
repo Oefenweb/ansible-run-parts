@@ -1,7 +1,7 @@
 # tasks file
 ---
 - name: install dependencies
-  apt:
+  ansible.builtin.apt:
     name: "{{ run_parts_dependencies }}"
     state: "{{ apt_install_state | default('latest') }}"
     update_cache: true
@@ -12,7 +12,7 @@
     - run-parts-dependencies
 
 - name: stat directories
-  stat:
+  ansible.builtin.stat:
     path: "{{ item }}/"
   register: _stat_directories
   with_items:
@@ -24,11 +24,11 @@
     - run-parts-configure-directories-stat
 
 - name: create directories
-  file:
+  ansible.builtin.file:
     path: "{{ item.item }}"
     state: directory
     owner: root
-    group: root
+    ansible.builtin.group: root
     mode: 0755
   with_items: "{{ _stat_directories.results }}"
   when:
@@ -41,11 +41,11 @@
     - run-parts-configure-directories-create
 
 - name: create (group) directories
-  file:
+  ansible.builtin.file:
     path: "{{ run_parts_configuration_path }}/{{ item.name }}.d"
     state: directory
     owner: "{{ item.owner | default('root') }}"
-    group: "{{ item.group | default('root') }}"
+    ansible.builtin.group: "{{ item.group | default('root') }}"
     mode: "{{ item.mode | default('0755') }}"
   with_items: "{{ run_parts_groups }}"
   when: item.state is undefined or item.state == 'present'
@@ -56,11 +56,11 @@
     - run-parts-configure-directories-create
 
 - name: create parts
-  copy:
+  ansible.builtin.copy:
     dest: "{{ run_parts_configuration_path }}/{{ item.0.name }}.d/{{ item.1.name }}"
     content: "{{ item.1.content | default('') }}"
     owner: "{{ item.1.owner | default('root') }}"
-    group: "{{ item.1.group | default('root') }}"
+    ansible.builtin.group: "{{ item.1.group | default('root') }}"
     mode: "{{ item.1.mode | default('0755') }}"
   with_subelements:
     - "{{ run_parts_groups | selectattr('parts', 'defined') | list }}"
@@ -73,7 +73,7 @@
     - run-parts-configure-parts-create
 
 - name: remove parts
-  file:
+  ansible.builtin.file:
     path: "{{ run_parts_configuration_path }}/{{ item.0.name }}.d/{{ item.1.name }}"
     state: absent
   with_subelements:
@@ -89,7 +89,7 @@
     - run-parts-configure-parts-remove
 
 - name: remove (group) directories
-  file:
+  ansible.builtin.file:
     path: "{{ run_parts_configuration_path }}/{{ item.name }}.d"
     state: absent
   with_items: "{{ run_parts_groups }}"
@@ -103,7 +103,7 @@
     - run-parts-configure-directories-remove
 
 - name: configure (cron) jobs
-  cron:
+  ansible.builtin.cron:
     name: "{{ item.name }}"
     job: "{{ item.job }}"
     state: "{{ item.state | default('present') }}"
@@ -113,7 +113,7 @@
     month: "{{ item.month | default('*') }}"
     weekday: "{{ item.weekday | default('*') }}"
     cron_file: run-parts
-    user: root
+    ansible.builtin.user: root
   with_items: "{{ run_parts_jobs }}"
   tags:
     - configuration
