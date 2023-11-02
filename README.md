@@ -46,7 +46,7 @@ None
 ---
 - hosts: all
   roles:
-   - run-parts
+    - oefenweb.run-parts
   vars:
     run_parts_groups:
       - name: lorem
